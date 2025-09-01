@@ -1,6 +1,6 @@
 # Triangle Web Scraper
 
-![Maximum Triangle Banner](attachment://maximum_triangle_banner.png)
+![Maximum Triangle Banner](maximum_triangle_banner.png)
 
 [![Python Version](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
