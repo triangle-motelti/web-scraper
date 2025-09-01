@@ -2,10 +2,12 @@
 import sys
 import requests
 from bs4 import BeautifulSoup
+import triangle
 
 # import your modular extractors
 from extractors import extract_links, extract_phone_numbers, extract_emails, extract_locations
 
+triangle.ascii_art("motelti   triangle scraper", font="slant", color="blue")
 # read URL from stdin (like your original)
 url = sys.stdin.readline().strip()
 if not url:
