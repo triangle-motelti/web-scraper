@@ -8,9 +8,9 @@ from extractors import extract_links, extract_phone_numbers, extract_emails, ext
 
 
 def main():
-    triangle.ascii_art("motelti   triangle scraper", font="slant", color="blue")
+    triangle.ascii_art("moteLti triangLe", font="slant", color="blue")
 
-    print("put a link to web page:")
+    print("put a link to the web page that you want to scrap:")
     url = sys.stdin.readline().strip()
     if not url:
         print("No URL provided on stdin")
