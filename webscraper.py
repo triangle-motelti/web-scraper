@@ -76,11 +76,9 @@ def extract_emails():
 
 
 def extract_locations():
-    # Get all visible text from the page
-    page_text = soup.get_text(separator=' ', strip=True)
-    address_pattern = re.compile(r'([A-Za-z\s\.,\-]+,\s*[A-Za-z\s\.,\-]+,\s*[A-Za-z\s\.,\-]+)')
-    addresses = set(re.findall(address_pattern, page_text))
-    def verify_address(address):
+    address_element = soup.find('p', class_='text-gray-400 text-small')
+    if address_element:
+        address = address_element.get_text(strip=True)
         url = "https://nominatim.openstreetmap.org/search"
         params = {
             'q': address,
@@ -91,17 +89,17 @@ def extract_locations():
         headers = {
             'User-Agent': 'AddressVerifier/1.0'
         }
-        response = requests.get(url, params=params, headers=headers)
-        results = response.json()
-        if results:
-            print(f"{address} [VALID] Lat: {results[0]['lat']}, Lon: {results[0]['lon']}")
-        else:
-            print(f"{address} [NOT FOUND]")
-    if not addresses:
-        print("No addresses found!")
+        try:
+            response = requests.get(url, params=params, headers=headers)
+            results = response.json()
+            if results:
+                print(f"{address} [VALID] Lat: {results[0]['lat']}, Lon: {results[0]['lon']}")
+            else:
+                print(f"{address} [NOT FOUND]")
+        except Exception as e:
+            print(f"{address} [ERROR: {e}]")
     else:
-        for address in addresses:
-            verify_address(address)
+        print("No address found!")
 
 if choice == '1':
     extract_links()
