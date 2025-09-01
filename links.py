@@ -1,9 +1,6 @@
 import requests
 
 def extract_links(soup, check_reachable=True, timeout=5):
-    """
-    Find <a> tags with http/https hrefs. If check_reachable True, try to GET them.
-    """
     links = soup.find_all('a')
     found = False
     for link in links:

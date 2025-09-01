@@ -3,10 +3,6 @@ import re
 EMAIL_RE = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
 
 def extract_emails(text, dns_resolver=None):
-    """
-    Find emails in text. If dns_resolver (module) is passed, verify MX records.
-    dns_resolver should be the imported dns.resolver module or None.
-    """
     emails = set(re.findall(EMAIL_RE, text))
     if not emails:
         print("Doesn't contain any emails!")

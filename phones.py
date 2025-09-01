@@ -1,9 +1,6 @@
 import re, phonenumbers
 
 def extract_phone_numbers(text):
-    """
-    Extract possible phone numbers via regex, validate via phonenumbers lib.
-    """
     possible_numbers = re.findall(r'\+?\d[\d\s\-\(\)]{8,}\d', text)
     valid_phones = set()
     for number in possible_numbers:
