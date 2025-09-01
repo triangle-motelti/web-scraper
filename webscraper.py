@@ -1,15 +1,31 @@
-import sys, requests, webbrowser, re,  phonenumbers
+#!/usr/bin/env python3
+import sys
+import requests
 from bs4 import BeautifulSoup
 
-try:
-    import dns.resolver
-    DNS_AVAILABLE = True
-except ImportError:
-    DNS_AVAILABLE = False
+# import your modular extractors
+from extractors import extract_links, extract_phone_numbers, extract_emails, extract_locations
 
+# read URL from stdin (like your original)
 url = sys.stdin.readline().strip()
-response = requests.get(url)
+if not url:
+    print("No URL provided on stdin")
+    sys.exit(1)
+
+try:
+    response = requests.get(url, timeout=10)
+    response.raise_for_status()
+except Exception as e:
+    print(f"Failed to fetch {url}: {e}")
+    sys.exit(2)
+
 soup = BeautifulSoup(response.text, 'html.parser')
+
+# Detect dnspython optionally and pass resolver module to the email extractor
+try:
+    import dns.resolver as dns_resolver  # type: ignore
+except Exception:
+    dns_resolver = None
 
 print("What do you want to extract?")
 print("1: Links")
@@ -19,95 +35,13 @@ print("4: Locations (addresses)")
 
 choice = input("Enter the number of your choice: ").strip()
 
-def extract_links():
-    links = soup.find_all('a')
-    found = False
-    for link in links:
-        href = link.get('href')
-        if href and href.startswith(('http', 'https')):
-            found = True
-            print(f"Checking {href} ... ", end="")
-            try:
-                r = requests.get(href, timeout=5)
-                if r.status_code == 200:
-                    print("Reachable!")
-                else:
-                    print(f"Returned status: {r.status_code}")
-            except Exception as e:
-                print(f"Not reachable ({e})")
-    if not found:
-        print("Doesn't contain any links!")
-
-def extract_phone_numbers():
-    # Find all digit groups that could be phone numbers
-    possible_numbers = re.findall(r'\+?\d[\d\s\-\(\)]{8,}\d', response.text)
-    valid_phones = set()
-    for number in possible_numbers:
-        try:
-            parsed = phonenumbers.parse(number, None)
-            if phonenumbers.is_valid_number(parsed):
-                valid_phones.add(phonenumbers.format_number(parsed, phonenumbers.PhoneNumberFormat.INTERNATIONAL))
-        except phonenumbers.phonenumberutil.NumberParseException:
-            continue
-    if not valid_phones:
-        print("Doesn't contain any valid phone numbers!")
-    else:
-        for number in valid_phones:
-            print(number)
-
-
-def extract_emails():
-    email_pattern = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
-    emails = set(re.findall(email_pattern, response.text))
-    if not emails:
-        print("Doesn't contain any emails!")
-    else:
-        for email in emails:
-            print(f"{email} ", end="")
-            if DNS_AVAILABLE:
-                domain = email.split('@')[1]
-                try:
-                    dns.resolver.resolve(domain, 'MX')
-                    print("[domain has MX records]")
-                except Exception:
-                    print("[domain has NO MX records!]")
-            else:
-                print("[domain verification unavailable: dnspython not installed]")
-
-
-def extract_locations():
-    address_element = soup.find('p', class_='text-gray-400 text-small')
-    if address_element:
-        address = address_element.get_text(strip=True)
-        url = "https://nominatim.openstreetmap.org/search"
-        params = {
-            'q': address,
-            'format': 'json',
-            'addressdetails': 1,
-            'limit': 1,
-        }
-        headers = {
-            'User-Agent': 'AddressVerifier/1.0'
-        }
-        try:
-            response = requests.get(url, params=params, headers=headers)
-            results = response.json()
-            if results:
-                print(f"{address} [VALID] Lat: {results[0]['lat']}, Lon: {results[0]['lon']}")
-            else:
-                print(f"{address} [NOT FOUND]")
-        except Exception as e:
-            print(f"{address} [ERROR: {e}]")
-    else:
-        print("No address found!")
-
 if choice == '1':
-    extract_links()
+    extract_links(soup)
 elif choice == '2':
-    extract_phone_numbers()
+    extract_phone_numbers(response.text)
 elif choice == '3':
-    extract_emails()
+    extract_emails(response.text, dns_resolver)
 elif choice == '4':
-    extract_locations()
+    extract_locations(soup)
 else:
     print("Invalid choice! Please enter a number between 1 and 4.")
