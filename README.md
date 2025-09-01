@@ -138,11 +138,5 @@ Contributions are welcome! To contribute:
 3. **Submit Pull Requests**: Fork the repository, create a feature branch, and submit a pull request with clear descriptions of your changes.
 4. **Report Issues**: Use the issue tracker to report bugs or suggest improvements.
 
-Please follow the [MIT License](LICENSE) when contributing.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
 ---
 Happy scraping with Triangle Web Scraper!
