@@ -13,17 +13,17 @@ def extract_links(soup, check_reachable=True, timeout=5):
         href = link.get('href')
         if href and href.startswith(('http', 'https')):
             found = True
-            print(green("checking:"), f"{href} ... ", end="")
+            print(green("[checking]:"), f"{href} ... ", end="")
             if not check_reachable:
                 print("skipped reachability check")
                 continue
             try:
                 r = requests.get(href, timeout=timeout)
                 if r.status_code == 200:
-                    print("Reachable!")
+                    print(green("Reachable!"))
                 else:
-                    print(f"Returned status: {r.status_code}")
+                    print(red(f"Returned status: "), green(f"{r.status_code}"))
             except Exception as e:
-                print(f"Not reachable ({e})")
+                print(red(f"Not reachable ({e})"))
     if not found:
-        print("Doesn't contain any links!")
+        print(red("Doesn't contain any links!"))

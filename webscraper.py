@@ -74,10 +74,10 @@ if __name__ == "__main__":
                 print(red("No URL provided on stdin"))
                 sys.exit(1)
         else:
-            print(green("put a link to the web page that you want to scrap:"))
+            print(green("<put a link to the web page that you want to scrap>:"))
             url = input().strip()
             if not url:
-                print(red("No URL provided"))
+                print(red("[No URL provided]"))
                 sys.exit(1)
 
         main(url, args.choice)
