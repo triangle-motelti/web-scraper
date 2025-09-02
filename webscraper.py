@@ -8,9 +8,9 @@ from interactive_in import get_interactive_input
 
 from extractors import extract_links, extract_phone_numbers, extract_emails, extract_locations
 
+triangle.ascii_art("moteLti triangLe", font="slant", color="blue")
 
 def main(url, choice):
-    triangle.ascii_art("moteLti triangLe", font="slant", color="blue")
 
     print("Scraping URL:", url)
 
