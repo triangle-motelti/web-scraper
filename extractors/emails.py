@@ -1,5 +1,11 @@
 import re
 
+def green(text):
+    return f"\033[32m{text}\033[0m"
+
+def red(text):
+    return f"\033[31m{text}\033[0m"
+
 EMAIL_RE = re.compile(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
 
 def extract_emails(text, dns_resolver=None):
@@ -14,8 +20,8 @@ def extract_emails(text, dns_resolver=None):
             domain = email.split('@', 1)[1]
             try:
                 dns_resolver.resolve(domain, 'MX')
-                print("[domain has MX records]")
+                print(green("[domain has MX records]"))
             except Exception:
-                print("[domain has NO MX records!]")
+                print(red("[domain has NO MX records!]"))
         else:
             print("[domain verification unavailable: dnspython not installed]")

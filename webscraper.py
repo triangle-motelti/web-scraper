@@ -10,15 +10,21 @@ from extractors import extract_links, extract_phone_numbers, extract_emails, ext
 
 triangle.ascii_art("moteLti triangLe", font="slant", color="blue")
 
+def green(text):
+    return f"\033[32m{text}\033[0m"
+
+def red(text):
+    return f"\033[31m{text}\033[0m"
+
 def main(url, choice):
 
-    print("Scraping URL:", url)
+    print(red("Scraping URL:"), url)
 
     try:
         response = requests.get(url, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(f"Failed to fetch {url}: {e}")
+        print(fred("Failed to fetch {url}: {e}"))
         sys.exit(2)
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -28,22 +34,22 @@ def main(url, choice):
     except Exception:
         dns_resolver = None
 
-    print("What do you want to extract?")
-    print("[1]: Links")
-    print("[2]: Phone numbers")
-    print("[3]: Emails (with domain verification)")
-    print("[4]: Locations (addresses)")
+    print(green("<What do you want to extract?>"))
+    print(green("[1]: Links"))
+    print(green("[2]: Phone numbers"))
+    print(green("[3]: Emails (with domain verification)"))
+    print(green("[4]: Locations (addresses)"))
 
     if choice is None:
-        choice = get_interactive_input("Enter the number of your choice: ")
+        choice = get_interactive_input(green("<Enter the number of your choice:> "))
         if not choice:
-            print("Error: No choice provided. Please enter a number between 1 and 4.")
+            print(red("Error: No choice provided. Please enter a number between 1 and 4."))
             sys.exit(1)
     else:
-        print(f"Selected choice: {choice}")
+        print(fgreen("Selected choice: {choice}"))
 
     if choice not in ['1', '2', '3', '4']:
-        print("Invalid choice! Please enter a number between 1 and 4.")
+        print(red("Invalid choice! Please enter a number between 1 and 4."))
         sys.exit(1)
 
     if choice == '1':
@@ -65,13 +71,13 @@ if __name__ == "__main__":
         if not sys.stdin.isatty():
             url = sys.stdin.readline().strip()
             if not url:
-                print("No URL provided on stdin")
+                print(red("No URL provided on stdin"))
                 sys.exit(1)
         else:
-            print("put a link to the web page that you want to scrap:")
+            print(green("put a link to the web page that you want to scrap:"))
             url = input().strip()
             if not url:
-                print("No URL provided")
+                print(red("No URL provided"))
                 sys.exit(1)
 
         main(url, args.choice)
