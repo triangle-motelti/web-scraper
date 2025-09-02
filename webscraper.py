@@ -29,10 +29,10 @@ def main(url, choice):
         dns_resolver = None
 
     print("What do you want to extract?")
-    print("1: Links")
-    print("2: Phone numbers")
-    print("3: Emails (with domain verification)")
-    print("4: Locations (addresses)")
+    print("[1]: Links")
+    print("[2]: Phone numbers")
+    print("[3]: Emails (with domain verification)")
+    print("[4]: Locations (addresses)")
 
     if choice is None:
         choice = get_interactive_input("Enter the number of your choice: ")
