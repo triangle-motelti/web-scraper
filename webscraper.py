@@ -24,7 +24,7 @@ def main(url, choice):
         response = requests.get(url, timeout=10)
         response.raise_for_status()
     except Exception as e:
-        print(fred("Failed to fetch {url}: {e}"))
+        print(red(f"Failed to fetch {url}: {e}"))
         sys.exit(2)
 
     soup = BeautifulSoup(response.text, 'html.parser')
@@ -46,7 +46,7 @@ def main(url, choice):
             print(red("Error: No choice provided. Please enter a number between 1 and 4."))
             sys.exit(1)
     else:
-        print(fgreen("Selected choice: {choice}"))
+        print(green(f"Selected choice: {choice}"))
 
     if choice not in ['1', '2', '3', '4']:
         print(red("Invalid choice! Please enter a number between 1 and 4."))
