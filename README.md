@@ -54,6 +54,8 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 python3 -m pip install -r requirements.txt
 ```
 
+![Alt text](requirements.png)
+
 ### 3. Install Python Dependencies
 
 From the project root, install the required packages:
@@ -77,6 +79,8 @@ To update or regenerate `requirements.txt` after adding new dependencies:
 ## Usage
 
 Run the scraper in either **interactive** or **non-interactive** mode.
+
+![Alt text](run-scraper.png)
 
 ### Interactive Mode
 
