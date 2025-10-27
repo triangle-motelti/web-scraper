@@ -80,7 +80,7 @@ To update or regenerate `requirements.txt` after adding new dependencies:
 
 Run the scraper in either **interactive** or **non-interactive** mode.
 
-![Alt text](run-scraper.png)
+![Alt text](run-Scraper.png)
 
 ### Interactive Mode
 
